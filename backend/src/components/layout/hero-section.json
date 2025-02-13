@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_layout_hero_sections",
+  "info": {
+    "displayName": "Hero section",
+    "icon": "code",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroDesc": {
+      "type": "string"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "Link": {
+      "type": "component",
+      "repeatable": false,
+      "component": "components.link"
+    }
+  }
+}

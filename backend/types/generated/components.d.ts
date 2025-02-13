@@ -1,5 +1,60 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface ComponentsFeature extends Struct.ComponentSchema {
+  collectionName: 'components_components_features';
+  info: {
+    displayName: 'Feature';
+  };
+  attributes: {
+    featureIcon: Schema.Attribute.Enumeration<
+      ['CLOUD_ICON', 'CHECK_ICON', 'CLOCK_ICON']
+    >;
+    heading: Schema.Attribute.String;
+    subHeading: Schema.Attribute.Text;
+  };
+}
+
+export interface ComponentsLink extends Struct.ComponentSchema {
+  collectionName: 'components_components_links';
+  info: {
+    displayName: 'Link';
+    icon: 'book';
+  };
+  attributes: {
+    isExternal: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    linkText: Schema.Attribute.String;
+    linkUrl: Schema.Attribute.String;
+  };
+}
+
+export interface LayoutFeaturesSection extends Struct.ComponentSchema {
+  collectionName: 'components_layout_features_sections';
+  info: {
+    displayName: 'Features Section';
+    icon: 'bell';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    feature: Schema.Attribute.Component<'components.feature', true>;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface LayoutHeroSection extends Struct.ComponentSchema {
+  collectionName: 'components_layout_hero_sections';
+  info: {
+    description: '';
+    displayName: 'Hero section';
+    icon: 'code';
+  };
+  attributes: {
+    heroDesc: Schema.Attribute.String;
+    heroImage: Schema.Attribute.Media<'images'>;
+    heroTitle: Schema.Attribute.String;
+    Link: Schema.Attribute.Component<'components.link', false>;
+  };
+}
+
 export interface SharedMedia extends Struct.ComponentSchema {
   collectionName: 'components_shared_media';
   info: {
@@ -65,6 +120,10 @@ export interface SharedSlider extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'components.feature': ComponentsFeature;
+      'components.link': ComponentsLink;
+      'layout.features-section': LayoutFeaturesSection;
+      'layout.hero-section': LayoutHeroSection;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;
       'shared.rich-text': SharedRichText;

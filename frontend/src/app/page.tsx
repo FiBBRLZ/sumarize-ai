@@ -1,10 +1,43 @@
-import { Button } from "@/components/ui/button";
-import { get } from "http";
+import { FeaturesSection } from "@/components/custom/features-section";
+import HeroSection from "@/components/custom/hero-section";
+import { stringify } from 'qs';
+import { getStrapiUrl } from "@/lib/utils";
+
+const homepageQuery = stringify({
+    populate: {
+      blocks: {
+        on: {
+          "layout.hero-section": {
+            populate: {
+              heroImage: {
+                fields: ["url", "alternativeText"]
+              },
+              Link: {
+                populate: true
+              }
+            }
+          },
+          "layout.features-section": {
+            populate: {
+              feature: {
+                populate: true
+              }
+            }
+          }
+        }
+      }
+    },
+})
+
 
 async function getStrapiData(path: string) {
-  const baseUrl = 'http://localhost:1337';
+  const baseUrl = getStrapiUrl();
+
+  const url = new URL(path, baseUrl);
+  url.search = homepageQuery;
+
   try {
-    const response = await fetch(baseUrl + path);
+    const response = await fetch(url);
     const data = await response.json();
     return data;
 
@@ -17,16 +50,17 @@ async function getStrapiData(path: string) {
 
 
 export default async function Home() {
-  const { data: hero } = await getStrapiData('/api/home-page');
+  const strapitData = await getStrapiData('/api/home-page');
 
-  console.log(hero);
+  console.log(strapitData)
+
+  const { blocks } = strapitData.data;
+
 
   return (
-    <div className='max-w-[1200px] mx-auto min-h-screen'>
-      <h1>{hero.heroTitle}</h1>
-      <p>{hero.heroDesc}</p>
-      <Button variant="outline">Button</Button>
-
+    <div>
+      <HeroSection data={blocks[0]} />
+      <FeaturesSection data={blocks[1]} />
     </div>
   );
 }
