@@ -30,7 +30,7 @@ interface FeaturesSectionProps {
 }
 
 
-export function FeaturesSection( { data }: { readonly data: FeaturesSectionProps } ) {
+export default function FeaturesSection( { data }: { readonly data: FeaturesSectionProps } ) {
     const features = data.feature;
 
     return (

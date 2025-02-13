@@ -1,66 +1,30 @@
-import { FeaturesSection } from "@/components/custom/features-section";
+import FeaturesSection from "@/components/custom/features-section";
 import HeroSection from "@/components/custom/hero-section";
 import { stringify } from 'qs';
 import { getStrapiUrl } from "@/lib/utils";
-
-const homepageQuery = stringify({
-    populate: {
-      blocks: {
-        on: {
-          "layout.hero-section": {
-            populate: {
-              heroImage: {
-                fields: ["url", "alternativeText"]
-              },
-              Link: {
-                populate: true
-              }
-            }
-          },
-          "layout.features-section": {
-            populate: {
-              feature: {
-                populate: true
-              }
-            }
-          }
-        }
-      }
-    },
-})
+import { getHomepageData } from "@/data/loaders";
 
 
-async function getStrapiData(path: string) {
-  const baseUrl = getStrapiUrl();
+const blockComponents = {
+  "layout.hero-section": HeroSection,
+  "layout.features-section": FeaturesSection,
+};
 
-  const url = new URL(path, baseUrl);
-  url.search = homepageQuery;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
-
-  } catch (error) {
-    console.log(error); 
-  }
-
+function blockRenderer(block: any) {
+  const Component = blockComponents[block.__component as keyof typeof blockComponents];
+  return Component ? <Component key={block.id} data={block} /> : null;
 }
 
 
-
 export default async function Home() {
-  const strapitData = await getStrapiData('/api/home-page');
+  const strapiData = await getHomepageData();
+  const { blocks } = strapiData?.data || [];
 
-  console.log(strapitData)
-
-  const { blocks } = strapitData.data;
-
+  console.log(blocks)
 
   return (
-    <div>
-      <HeroSection data={blocks[0]} />
-      <FeaturesSection data={blocks[1]} />
-    </div>
-  );
+    <main>
+      {blocks.map(blockRenderer)}
+    </main>
+  ); 
 }
