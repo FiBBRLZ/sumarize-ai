@@ -1,7 +1,5 @@
 import FeaturesSection from "@/components/custom/features-section";
 import HeroSection from "@/components/custom/hero-section";
-import { stringify } from 'qs';
-import { getStrapiUrl } from "@/lib/utils";
 import { getHomepageData } from "@/data/loaders";
 
 
