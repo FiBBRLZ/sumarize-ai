@@ -49,6 +49,31 @@ const homepageQuery = stringify({
     },
 });
 
+const globalQuery = stringify({
+    populate: [
+      "header.logoText",
+      "header.ctaButton",
+      "footer.logoText",
+      "footer.socialIcons",
+    ],
+}); 
+
+export async function getGlobalData() {
+    const baseUrl = getStrapiUrl();
+  
+    const url = new URL('/api/global', baseUrl);
+    url.search = globalQuery;
+  
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+  
+    } catch (error) {
+      console.log(error); 
+    }
+}
+  
 
 export async function getHomepageData() {
     const baseUrl = getStrapiUrl();
