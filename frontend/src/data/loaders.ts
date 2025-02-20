@@ -1,5 +1,6 @@
 import { stringify } from "qs";
 import { getStrapiUrl } from "@/lib/utils";
+import { on } from "events";
 
 const baseUrl = getStrapiUrl();
 
@@ -58,6 +59,15 @@ const globalQuery = stringify({
     ],
 }); 
 
+const globalMetadataQuery = stringify({
+  fields: ['siteName', 'siteDescription'],
+  populate: {
+    defaultSeo: {
+      populate: true
+    }
+  }
+})
+
 export async function getGlobalData() {
     const baseUrl = getStrapiUrl();
   
@@ -92,4 +102,13 @@ export async function getHomepageData() {
   
 }
   
+export async function getGlobalMetaData() {
+  const url = new URL('/api/global', baseUrl);
+
+  url.search = globalMetadataQuery;
+
+  return await fetchData(url.href);
+
+
+}
   

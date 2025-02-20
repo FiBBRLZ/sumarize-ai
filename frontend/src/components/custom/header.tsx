@@ -1,4 +1,5 @@
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 interface HeaderPops {
     id: number;
@@ -23,9 +24,9 @@ export default function Header({ data }:  { data : HeaderPops }) {
         <header className="py-[20px] bg-slate-50 shadow-lg fixed top-0 w-full z-20">
             <div className="container">
                 <div className="flex justify-between items-center">
-                    <a className="text-xl font-bold text-black" href={header.logoText.linkUrl}>{header.logoText.linkText}</a>
+                    <Link className="text-xl font-bold text-black" href={header.logoText.linkUrl}>{header.logoText.linkText}</Link>
                     <Button asChild size={"lg"} variant={'default'}>
-                        <a href={header.ctaButton.linkUrl}>{header.ctaButton.linkText}</a>
+                        <Link href={header.ctaButton.linkUrl}>{header.ctaButton.linkText}</Link>
                     </Button>
                 </div>
             </div>
