@@ -21,7 +21,7 @@ interface HeaderPops {
 export default function Header({ data }:  { data : HeaderPops }) {
     const header = data;
     return (
-        <header className="py-[20px] bg-slate-50 shadow-lg fixed top-0 w-full z-20">
+        <header className="py-[20px] bg-slate-50 shadow-lg w-full relative z-20">
             <div className="container">
                 <div className="flex justify-between items-center">
                     <Link className="text-xl font-bold text-black" href={header.logoText.linkUrl}>{header.logoText.linkText}</Link>
