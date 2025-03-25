@@ -1,7 +1,7 @@
 "use server"
 import { z } from "zod";
 import { cookies } from "next/headers";
-import { registerUserService } from "@/data/services/auth-service";
+import { registerUserService, loginUserService } from "@/data/services/auth-service";
 import { redirect } from "next/navigation";
 
 const config = {
@@ -64,4 +64,67 @@ export async function registerUserAction(prevState: any, formData: FormData) {
 
     (await cookies()).set('jwt', response.jwt, config);
     redirect('/dashboard');
+}
+
+const schemaLogin = z.object({
+    identifier: z
+      .string()
+      .min(3, {
+        message: "Identifier must have at least 3 or more characters",
+      })
+      .max(20, {
+        message: "Please enter a valid username or email address",
+      }),
+    password: z
+      .string()
+      .min(6, {
+        message: "Password must have at least 6 or more characters",
+      })
+      .max(100, {
+        message: "Password must be between 6 and 100 characters",
+      }),
+  });
+
+export async function loginUserAction(prevState: any, formData: FormData) {
+    const validatedFields = schemaLogin.safeParse({
+        identifier: formData.get("identifier"),
+        password: formData.get("password"),
+    });
+    if (!validatedFields.success) {
+        return {
+            ...prevState,
+            zodErrors: validatedFields.error.flatten().fieldErrors,
+            message: "Missing Fields. Failed to Login.",
+        };
+    }
+
+    const response = await loginUserService(validatedFields.data);
+
+    if(!response) {
+        return {
+            ...prevState,
+            strapiErrors: null,
+            zodErrors: null,
+            message: "Ops! Something went wrong. Please try again.",
+        };
+    }
+
+    if (response.error) {
+        return {
+            ...prevState,
+            strapiErrors: response.error,
+            zodErrors: null,
+            message: "Failed to Register.",
+        };
+    }
+
+    const cookieStore = await cookies();
+    cookieStore.set("jwt", response.jwt, config);
+    redirect("/dashboard");
+}
+
+export async function logoutAction() {
+    const cookieStore = await cookies();
+    cookieStore.set('jwt', '', {...config, maxAge: 0});
+    redirect('/');
 }
