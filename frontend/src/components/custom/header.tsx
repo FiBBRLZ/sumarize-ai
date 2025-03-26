@@ -1,7 +1,7 @@
-import isLoggedIn from "@/data/services/is-logged-in";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { LogoutButton } from "./logout-button";
+import { getUserMeLoader } from "@/data/services/get-user-me-loader";
 
 interface HeaderPops {
     id: number;
@@ -21,6 +21,9 @@ interface HeaderPops {
 
 
 export default async function Header({ data }:  { data : HeaderPops }) {
+    //assign user.ok key to user variable to check if user is logged in
+    const { ok: user } = await getUserMeLoader();
+
     const header = data;
     return (
         <header className="py-[20px] bg-slate-50 shadow-lg w-full relative z-20">
@@ -29,10 +32,13 @@ export default async function Header({ data }:  { data : HeaderPops }) {
                     <Link className="text-xl font-bold text-black" href={header.logoText.linkUrl}>{header.logoText.linkText}</Link>
                     <nav className="flex gap-5 justify-center items-center">
                         <Link href="/dashboard">Dashboard</Link>
-                        <Button asChild size={"lg"} variant={'default'}>
-                            <Link href={header.ctaButton.linkUrl}>{header.ctaButton.linkText}</Link>
-                        </Button>
-                        {await isLoggedIn() ? <LogoutButton /> : null }
+                        {user ? (
+                            <LogoutButton />  
+                        ): (
+                            <Button asChild size={"lg"} variant={'default'}>
+                                <Link href={header.ctaButton.linkUrl}>{header.ctaButton.linkText}</Link>
+                            </Button>
+                        )}
                     </nav>
                 </div>
             </div>
