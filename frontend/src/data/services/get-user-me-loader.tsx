@@ -4,7 +4,7 @@ import { getStrapiUrl } from "@/lib/utils";
 export async function getUserMeLoader() {
   const baseUrl = getStrapiUrl();
 
-  const url = new URL("/api/users/me", baseUrl);
+  const url = new URL("/api/users/me?populate=userPic", baseUrl);
 
   const authToken = await getAuthToken();
   if (!authToken) return { ok: false, data: null, error: null };

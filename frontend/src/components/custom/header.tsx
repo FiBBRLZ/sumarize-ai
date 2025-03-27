@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { StrapiImage } from "./strapi-image";
 import { LogoutButton } from "./logout-button";
 import { getUserMeLoader } from "@/data/services/get-user-me-loader";
 
@@ -22,12 +23,22 @@ interface HeaderPops {
 interface AuthUserProps {
     username: string;
     email: string;
+    userPic: {
+        url: string;
+        formats: {
+            thumbnail: {
+                url: string
+            }
+        };
+    };
 }
 
 export function LoggedInUser({userData}: { userData: AuthUserProps}) {
+    const userThumbnail = userData.userPic.formats.thumbnail.url;
     return (
-        <div className="flex gap-5">
-            <Link href="/dashboard/account" className="font-bold text-m px-3 hover:text-blue-600">{userData.username}</Link>
+        <div className="flex gap-5 justify-center items-center">
+            <StrapiImage src={userThumbnail} alt={userData.username} height={50} width={50} className="rounded-full w-10 h-10 object-cover" />
+            <Link href="/dashboard/account" className="font-bold text-m mr-5 hover:text-blue-600">{userData.username}</Link>
             <LogoutButton />
         </div>
     );
