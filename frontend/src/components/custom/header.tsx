@@ -37,8 +37,10 @@ export function LoggedInUser({userData}: { userData: AuthUserProps}) {
     const userThumbnail = userData.userPic.formats.thumbnail.url;
     return (
         <div className="flex gap-5 justify-center items-center">
-            <StrapiImage src={userThumbnail} alt={userData.username} height={50} width={50} className="rounded-full w-10 h-10 object-cover" />
-            <Link href="/dashboard/account" className="font-bold text-m mr-5 hover:text-blue-600">{userData.username}</Link>
+            <Link href="/dashboard/account" className="flex justify-center items-center gap-5 font-bold text-m mr-5 hover:text-blue-600">
+                <StrapiImage src={userThumbnail} alt={userData.username} height={50} width={50} className="rounded-full w-10 h-10 object-cover" />
+                <span>{userData.username}</span>
+            </Link>
             <LogoutButton />
         </div>
     );
