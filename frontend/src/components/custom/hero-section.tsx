@@ -26,8 +26,6 @@ interface HeroSectionProps {
 }
 
 
-
-
 export default async function HeroSection( { data }: { readonly data: HeroSectionProps } ) {
     const image = data.heroImage;
     const link = data.Link;

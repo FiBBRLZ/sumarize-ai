@@ -46,7 +46,7 @@ export default async function Header({ data }:  { data : HeaderPops }) {
                     <Link className="text-xl font-bold text-black" href={header.logoText.linkUrl}>{header.logoText.linkText}</Link>
                     <nav className="flex gap-5 justify-center items-center">
                         <ul className="font-sans text-sm mr-[20px]">
-                            <Link href="/dashboard">Dashboard</Link>
+                            <Link href="/">Home</Link>
                         </ul>
                         {user.ok ? (
                             <div className="flex gap-5 justify-center items-center px-5 py-3 border border-gray-200 rounded-lg">
